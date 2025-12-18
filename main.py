@@ -1,11 +1,7 @@
 import re
 
 def load_log_source(source_path):
-    """
-    Ponto de entrada do sistema.
-    Responsável por carregar os logs a partir de um arquivo
-    (ex.: auth.log ou dataset público).
-    """
+    """Ponto de entrada do sistema. Responsável por carregar os logs a partir do dataset"""
     raw_logs = []
     with open(source_path, 'r') as file:
         for line in file:
@@ -14,21 +10,13 @@ def load_log_source(source_path):
 
 
 def remove_log_header(log_line):
-    """
-    Remove o cabeçalho do log utilizando Regex.
-    Remove timestamp, hostname e PID do processo sshd.
-    """
+    """Remove o cabeçalho do log utilizando Regex.Remove timestamp, hostname e PID do processo sshd."""
     header_pattern = r'^[A-Za-z]{3}\s+\d+\s+\d+:\d+:\d+\s+\S+\s+sshd\[\d+\]:\s+'
     return re.sub(header_pattern, '', log_line)
 
 
 def normalize_log(log_line):
-    """
-    Normaliza o texto do log:
-    - converte para letras minúsculas
-    - remove caracteres especiais
-    - padroniza espaços em branco
-    """
+    """Normaliza o texto do log: remove símbolos e espaços em branco"""
     log_line = log_line.lower()
     log_line = re.sub(r'[^\w\s]', '', log_line)
     log_line = re.sub(r'\s+', ' ', log_line)
