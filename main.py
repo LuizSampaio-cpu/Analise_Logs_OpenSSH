@@ -160,24 +160,13 @@ def apply_analysis(events):
 
     count = 0
 
-    for idx, label in enumerate(labels):
+    for label in labels:
         if label == -1:
             count += 1
 
     return count
 
-
-# Método novo que gera templates de logs para análises
-def generate_templates(events):
-    templates = defaultdict(int)
-
-    for e in events:
-        template = re.sub(r'\d+\.\d+\.\d+\.\d+', '<IP>', e["processed_log"])
-        template = re.sub(r'user \w+', 'user <USER>', template)
-        templates[template] += 1
-
-    return templates
-
+#Método para exibir o status dos alertas e resultados da análise
 def status (bruteforce_alerts, enumeration_alerts, suspicious_alerts, count ):
      
 
