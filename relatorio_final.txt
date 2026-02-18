@@ -1,0 +1,705 @@
+RELATÓRIO – ANÁLISE DE LOGS OPENSSH
+
+Exemplos de logs processados:
+- Dec 10 06:55:46 LabSZ sshd[24200]: Invalid user webmaster from 173.234.31.186
+- Dec 10 06:55:48 LabSZ sshd[24200]: Failed password for invalid user webmaster from 173.234.31.186 port 38926 ssh2
+- Dec 10 07:07:38 LabSZ sshd[24206]: Invalid user test9 from 52.80.34.196
+- Dec 10 07:07:45 LabSZ sshd[24206]: Failed password for invalid user test9 from 52.80.34.196 port 36060 ssh2
+- Dec 10 07:08:28 LabSZ sshd[24208]: Invalid user webmaster from 173.234.31.186
+
+Templates gerados:
+- invalid user for USER from IP (15000)
+- failed password for USER from IP (197587)
+- accepted password for USER from IP (182)
+
+Eventos detectados:
+- Força bruta detectada do IP 52.80.34.196 (143 falhas)
+- Força bruta detectada do IP 202.100.179.208 (29 falhas)
+- Força bruta detectada do IP 112.95.230.3 (26 falhas)
+- Força bruta detectada do IP 123.235.32.19 (849 falhas)
+- Força bruta detectada do IP 183.136.162.51 (63 falhas)
+- Força bruta detectada do IP 195.154.37.122 (66 falhas)
+- Força bruta detectada do IP 175.102.13.6 (34 falhas)
+- Força bruta detectada do IP 5.188.10.180 (716 falhas)
+- Força bruta detectada do IP 103.207.39.212 (65 falhas)
+- Força bruta detectada do IP 185.190.58.151 (55 falhas)
+- Força bruta detectada do IP 103.99.0.122 (930 falhas)
+- Força bruta detectada do IP 187.141.143.180 (80 falhas)
+- Força bruta detectada do IP 103.207.39.16 (60 falhas)
+- Força bruta detectada do IP 104.192.3.34 (70 falhas)
+- Força bruta detectada do IP 60.2.12.12 (995 falhas)
+- Força bruta detectada do IP 119.4.203.64 (8 falhas)
+- Força bruta detectada do IP 183.62.140.253 (10852 falhas)
+- Força bruta detectada do IP 51.15.203.45 (8 falhas)
+- Força bruta detectada do IP 180.101.249.16 (16 falhas)
+- Força bruta detectada do IP 121.14.7.244 (20 falhas)
+- Força bruta detectada do IP 51.15.196.223 (8 falhas)
+- Força bruta detectada do IP 5.188.10.182 (618 falhas)
+- Força bruta detectada do IP 103.207.37.82 (18 falhas)
+- Força bruta detectada do IP 81.144.235.98 (777 falhas)
+- Força bruta detectada do IP 221.164.9.48 (9 falhas)
+- Força bruta detectada do IP 119.7.221.137 (1308 falhas)
+- Força bruta detectada do IP 175.207.12.37 (8 falhas)
+- Força bruta detectada do IP 195.154.63.158 (22 falhas)
+- Força bruta detectada do IP 61.143.3.203 (35 falhas)
+- Força bruta detectada do IP 5.188.10.156 (497 falhas)
+- Força bruta detectada do IP 117.107.159.146 (8 falhas)
+- Força bruta detectada do IP 2.176.38.105 (6 falhas)
+- Força bruta detectada do IP 94.222.18.230 (6 falhas)
+- Força bruta detectada do IP 58.53.219.75 (36 falhas)
+- Força bruta detectada do IP 114.35.77.143 (6 falhas)
+- Força bruta detectada do IP 121.193.184.2 (6 falhas)
+- Força bruta detectada do IP 87.120.255.141 (5 falhas)
+- Força bruta detectada do IP 123.157.138.165 (10 falhas)
+- Força bruta detectada do IP 58.42.244.194 (18 falhas)
+- Força bruta detectada do IP 119.253.248.211 (88 falhas)
+- Força bruta detectada do IP 183.230.146.26 (8 falhas)
+- Força bruta detectada do IP 60.172.229.172 (56 falhas)
+- Força bruta detectada do IP 115.71.16.143 (569 falhas)
+- Força bruta detectada do IP 119.7.221.129 (1650 falhas)
+- Força bruta detectada do IP 103.217.152.20 (331 falhas)
+- Força bruta detectada do IP 82.209.247.10 (6 falhas)
+- Força bruta detectada do IP 101.71.29.235 (15 falhas)
+- Força bruta detectada do IP 221.122.123.14 (6 falhas)
+- Força bruta detectada do IP 181.214.87.4 (381 falhas)
+- Força bruta detectada do IP 51.15.84.155 (8 falhas)
+- Força bruta detectada do IP 41.223.219.54 (12 falhas)
+- Força bruta detectada do IP 119.145.21.178 (8 falhas)
+- Força bruta detectada do IP 2.239.208.154 (20 falhas)
+- Força bruta detectada do IP 123.16.30.186 (15 falhas)
+- Força bruta detectada do IP 123.150.200.121 (36 falhas)
+- Força bruta detectada do IP 103.207.38.178 (102 falhas)
+- Força bruta detectada do IP 221.122.119.83 (10 falhas)
+- Força bruta detectada do IP 210.77.145.35 (6 falhas)
+- Força bruta detectada do IP 212.237.41.66 (7 falhas)
+- Força bruta detectada do IP 211.159.159.39 (7 falhas)
+- Força bruta detectada do IP 223.68.134.29 (30 falhas)
+- Força bruta detectada do IP 82.200.65.218 (62 falhas)
+- Força bruta detectada do IP 118.97.104.142 (63 falhas)
+- Força bruta detectada do IP 183.192.189.131 (8755 falhas)
+- Força bruta detectada do IP 183.63.172.52 (7506 falhas)
+- Força bruta detectada do IP 212.237.41.152 (79 falhas)
+- Força bruta detectada do IP 179.90.137.139 (6 falhas)
+- Força bruta detectada do IP 103.79.141.133 (22 falhas)
+- Força bruta detectada do IP 113.215.161.97 (6 falhas)
+- Força bruta detectada do IP 163.172.151.98 (8 falhas)
+- Força bruta detectada do IP 82.207.46.234 (5 falhas)
+- Força bruta detectada do IP 202.92.128.175 (77 falhas)
+- Força bruta detectada do IP 143.107.220.201 (7 falhas)
+- Força bruta detectada do IP 212.129.45.158 (5 falhas)
+- Força bruta detectada do IP 183.129.173.73 (878 falhas)
+- Força bruta detectada do IP 193.201.224.232 (2992 falhas)
+- Força bruta detectada do IP 183.238.178.195 (14519 falhas)
+- Força bruta detectada do IP 114.166.226.182 (6 falhas)
+- Força bruta detectada do IP 51.15.138.77 (8 falhas)
+- Força bruta detectada do IP 124.68.10.20 (294 falhas)
+- Força bruta detectada do IP 27.191.235.93 (17 falhas)
+- Força bruta detectada do IP 203.158.215.184 (63 falhas)
+- Força bruta detectada do IP 42.159.145.29 (384 falhas)
+- Força bruta detectada do IP 177.197.55.156 (14 falhas)
+- Força bruta detectada do IP 122.194.76.132 (27 falhas)
+- Força bruta detectada do IP 183.57.42.19 (1655 falhas)
+- Força bruta detectada do IP 103.99.3.227 (9 falhas)
+- Força bruta detectada do IP 164.163.193.172 (12 falhas)
+- Força bruta detectada do IP 103.207.39.99 (8 falhas)
+- Força bruta detectada do IP 103.207.36.21 (34 falhas)
+- Força bruta detectada do IP 209.92.176.24 (29 falhas)
+- Força bruta detectada do IP 103.207.39.154 (20 falhas)
+- Força bruta detectada do IP 121.133.177.171 (5 falhas)
+- Força bruta detectada do IP 218.17.80.182 (7 falhas)
+- Força bruta detectada do IP 212.129.46.171 (8 falhas)
+- Força bruta detectada do IP 46.101.123.127 (163 falhas)
+- Força bruta detectada do IP 113.254.70.249 (6 falhas)
+- Força bruta detectada do IP 223.155.239.92 (6 falhas)
+- Força bruta detectada do IP 103.79.141.173 (31 falhas)
+- Força bruta detectada do IP 190.174.14.217 (6 falhas)
+- Força bruta detectada do IP 179.146.205.65 (8 falhas)
+- Força bruta detectada do IP 177.129.244.124 (6 falhas)
+- Força bruta detectada do IP 138.68.152.231 (15 falhas)
+- Força bruta detectada do IP 163.172.227.16 (20 falhas)
+- Força bruta detectada do IP 121.5.23.175 (12 falhas)
+- Força bruta detectada do IP 158.140.138.225 (61 falhas)
+- Força bruta detectada do IP 163.172.160.142 (8 falhas)
+- Força bruta detectada do IP 163.172.128.123 (8 falhas)
+- Força bruta detectada do IP 51.15.223.51 (24 falhas)
+- Força bruta detectada do IP 165.227.223.226 (18 falhas)
+- Força bruta detectada do IP 60.25.6.155 (6 falhas)
+- Força bruta detectada do IP 103.210.135.136 (14 falhas)
+- Força bruta detectada do IP 123.172.176.39 (6 falhas)
+- Força bruta detectada do IP 119.41.194.101 (6 falhas)
+- Força bruta detectada do IP 103.207.37.179 (10 falhas)
+- Força bruta detectada do IP 116.228.198.11 (14 falhas)
+- Força bruta detectada do IP 14.116.171.251 (4462 falhas)
+- Força bruta detectada do IP 62.173.139.198 (6 falhas)
+- Força bruta detectada do IP 59.124.95.28 (6 falhas)
+- Força bruta detectada do IP 37.191.196.1 (6 falhas)
+- Força bruta detectada do IP 103.74.121.94 (6 falhas)
+- Força bruta detectada do IP 103.207.37.84 (9 falhas)
+- Força bruta detectada do IP 165.227.55.102 (11 falhas)
+- Força bruta detectada do IP 212.237.47.142 (69 falhas)
+- Força bruta detectada do IP 49.171.119.51 (6 falhas)
+- Força bruta detectada do IP 183.62.232.144 (64 falhas)
+- Força bruta detectada do IP 223.18.236.226 (16 falhas)
+- Força bruta detectada do IP 165.227.109.220 (5 falhas)
+- Força bruta detectada do IP 138.68.14.66 (8 falhas)
+- Força bruta detectada do IP 203.190.163.125 (442 falhas)
+- Força bruta detectada do IP 178.47.244.146 (6 falhas)
+- Força bruta detectada do IP 185.222.209.151 (503 falhas)
+- Força bruta detectada do IP 80.211.253.17 (7 falhas)
+- Força bruta detectada do IP 112.67.184.235 (6 falhas)
+- Força bruta detectada do IP 59.182.185.57 (6 falhas)
+- Força bruta detectada do IP 106.75.164.186 (12 falhas)
+- Força bruta detectada do IP 104.236.165.119 (11 falhas)
+- Força bruta detectada do IP 217.23.4.15 (13 falhas)
+- Força bruta detectada do IP 154.16.215.7 (25 falhas)
+- Força bruta detectada do IP 114.207.154.2 (63 falhas)
+- Força bruta detectada do IP 51.15.220.221 (40 falhas)
+- Força bruta detectada do IP 109.15.255.146 (6 falhas)
+- Força bruta detectada do IP 132.147.49.216 (61 falhas)
+- Força bruta detectada do IP 223.154.247.87 (6 falhas)
+- Força bruta detectada do IP 94.229.73.156 (35 falhas)
+- Força bruta detectada do IP 103.89.91.97 (19 falhas)
+- Força bruta detectada do IP 223.111.185.67 (16 falhas)
+- Força bruta detectada do IP 51.15.199.186 (52 falhas)
+- Força bruta detectada do IP 118.186.36.50 (62 falhas)
+- Força bruta detectada do IP 218.75.121.131 (6 falhas)
+- Força bruta detectada do IP 138.197.89.108 (17 falhas)
+- Força bruta detectada do IP 198.199.119.249 (16 falhas)
+- Força bruta detectada do IP 220.177.198.107 (16 falhas)
+- Força bruta detectada do IP 111.225.216.3 (6 falhas)
+- Força bruta detectada do IP 173.239.228.96 (79 falhas)
+- Força bruta detectada do IP 195.154.45.62 (21 falhas)
+- Força bruta detectada do IP 103.89.91.230 (27 falhas)
+- Força bruta detectada do IP 195.154.59.62 (10 falhas)
+- Força bruta detectada do IP 163.172.157.212 (8 falhas)
+- Força bruta detectada do IP 103.204.70.183 (8 falhas)
+- Força bruta detectada do IP 180.169.107.150 (14 falhas)
+- Força bruta detectada do IP 46.125.36.243 (6 falhas)
+- Força bruta detectada do IP 61.153.56.30 (54 falhas)
+- Força bruta detectada do IP 185.165.29.140 (308 falhas)
+- Força bruta detectada do IP 116.211.91.193 (10 falhas)
+- Força bruta detectada do IP 103.207.39.98 (10 falhas)
+- Força bruta detectada do IP 42.112.31.173 (9 falhas)
+- Força bruta detectada do IP 183.238.25.86 (2065 falhas)
+- Força bruta detectada do IP 58.221.249.102 (153 falhas)
+- Força bruta detectada do IP 159.203.87.8 (47 falhas)
+- Força bruta detectada do IP 210.212.210.86 (5 falhas)
+- Força bruta detectada do IP 220.82.194.184 (6 falhas)
+- Força bruta detectada do IP 210.13.64.18 (44 falhas)
+- Força bruta detectada do IP 218.84.173.202 (46 falhas)
+- Força bruta detectada do IP 82.28.100.182 (6 falhas)
+- Força bruta detectada do IP 203.147.34.56 (9 falhas)
+- Força bruta detectada do IP 113.9.225.169 (6 falhas)
+- Força bruta detectada do IP 80.211.162.21 (12 falhas)
+- Força bruta detectada do IP 31.13.202.74 (6 falhas)
+- Força bruta detectada do IP 103.204.177.144 (5 falhas)
+- Força bruta detectada do IP 103.99.0.221 (9 falhas)
+- Força bruta detectada do IP 183.136.188.116 (10 falhas)
+- Força bruta detectada do IP 110.73.7.147 (6 falhas)
+- Força bruta detectada do IP 51.15.217.70 (16 falhas)
+- Força bruta detectada do IP 103.74.121.96 (12 falhas)
+- Força bruta detectada do IP 185.165.29.57 (417 falhas)
+- Força bruta detectada do IP 66.171.88.199 (61 falhas)
+- Força bruta detectada do IP 223.155.252.174 (6 falhas)
+- Força bruta detectada do IP 202.171.48.211 (6 falhas)
+- Força bruta detectada do IP 31.181.7.168 (6 falhas)
+- Força bruta detectada do IP 183.239.228.51 (12 falhas)
+- Força bruta detectada do IP 205.185.115.121 (71 falhas)
+- Força bruta detectada do IP 177.184.86.140 (6 falhas)
+- Força bruta detectada do IP 202.107.104.119 (323 falhas)
+- Força bruta detectada do IP 183.136.178.30 (67 falhas)
+- Força bruta detectada do IP 183.136.178.26 (69 falhas)
+- Força bruta detectada do IP 183.136.169.234 (59 falhas)
+- Força bruta detectada do IP 220.191.194.42 (41 falhas)
+- Força bruta detectada do IP 60.191.229.146 (40 falhas)
+- Força bruta detectada do IP 121.14.27.58 (18 falhas)
+- Força bruta detectada do IP 220.189.210.211 (40 falhas)
+- Força bruta detectada do IP 122.224.69.34 (69 falhas)
+- Força bruta detectada do IP 122.224.73.38 (67 falhas)
+- Força bruta detectada do IP 115.233.91.246 (40 falhas)
+- Força bruta detectada do IP 115.233.91.242 (40 falhas)
+- Força bruta detectada do IP 221.215.236.110 (6 falhas)
+- Força bruta detectada do IP 218.235.101.206 (6 falhas)
+- Força bruta detectada do IP 182.23.64.18 (19 falhas)
+- Força bruta detectada do IP 209.250.241.56 (30 falhas)
+- Força bruta detectada do IP 202.100.182.250 (6 falhas)
+- Força bruta detectada do IP 159.89.44.45 (7 falhas)
+- Força bruta detectada do IP 103.89.91.98 (18 falhas)
+- Força bruta detectada do IP 84.131.85.55 (6 falhas)
+- Força bruta detectada do IP 183.129.154.138 (8670 falhas)
+- Força bruta detectada do IP 103.207.38.179 (13 falhas)
+- Força bruta detectada do IP 51.15.221.204 (160 falhas)
+- Força bruta detectada do IP 185.165.29.62 (49 falhas)
+- Força bruta detectada do IP 122.70.145.45 (89 falhas)
+- Força bruta detectada do IP 51.15.130.194 (142 falhas)
+- Força bruta detectada do IP 114.112.48.155 (506 falhas)
+- Força bruta detectada do IP 51.15.207.143 (131 falhas)
+- Força bruta detectada do IP 183.129.170.130 (3880 falhas)
+- Força bruta detectada do IP 218.156.85.17 (10 falhas)
+- Força bruta detectada do IP 212.83.176.1 (7 falhas)
+- Força bruta detectada do IP 103.207.39.38 (45 falhas)
+- Força bruta detectada do IP 66.35.51.195 (12 falhas)
+- Força bruta detectada do IP 51.15.129.62 (96 falhas)
+- Força bruta detectada do IP 192.151.237.154 (32 falhas)
+- Força bruta detectada do IP 116.196.86.246 (50 falhas)
+- Força bruta detectada do IP 183.96.119.62 (107 falhas)
+- Força bruta detectada do IP 219.135.58.209 (48 falhas)
+- Força bruta detectada do IP 27.72.43.14 (94 falhas)
+- Força bruta detectada do IP 183.82.117.185 (6 falhas)
+- Força bruta detectada do IP 207.194.34.105 (6 falhas)
+- Força bruta detectada do IP 218.31.113.113 (392 falhas)
+- Força bruta detectada do IP 112.35.8.128 (6 falhas)
+- Força bruta detectada do IP 104.131.135.224 (13 falhas)
+- Força bruta detectada do IP 60.173.82.156 (14 falhas)
+- Força bruta detectada do IP 222.175.172.115 (6 falhas)
+- Força bruta detectada do IP 165.227.124.44 (9 falhas)
+- Força bruta detectada do IP 175.156.173.35 (6 falhas)
+- Força bruta detectada do IP 87.120.255.161 (163 falhas)
+- Força bruta detectada do IP 116.192.20.106 (6 falhas)
+- Força bruta detectada do IP 95.140.223.88 (6 falhas)
+- Força bruta detectada do IP 186.224.163.77 (6 falhas)
+- Força bruta detectada do IP 51.15.129.122 (64 falhas)
+- Força bruta detectada do IP 209.136.0.101 (6 falhas)
+- Força bruta detectada do IP 103.224.166.40 (61 falhas)
+- Força bruta detectada do IP 119.193.140.182 (6 falhas)
+- Força bruta detectada do IP 46.237.127.58 (6 falhas)
+- Força bruta detectada do IP 123.59.182.194 (16 falhas)
+- Força bruta detectada do IP 125.65.165.70 (62 falhas)
+- Força bruta detectada do IP 201.240.113.240 (6 falhas)
+- Força bruta detectada do IP 125.119.137.221 (6 falhas)
+- Força bruta detectada do IP 159.89.16.221 (25 falhas)
+- Força bruta detectada do IP 58.218.213.45 (38 falhas)
+- Força bruta detectada do IP 119.193.140.207 (6 falhas)
+- Força bruta detectada do IP 45.77.138.41 (10 falhas)
+- Força bruta detectada do IP 58.217.157.177 (63 falhas)
+- Força bruta detectada do IP 218.69.245.219 (20 falhas)
+- Força bruta detectada do IP 103.89.88.163 (5 falhas)
+- Força bruta detectada do IP 209.250.242.246 (10 falhas)
+- Força bruta detectada do IP 80.211.140.229 (201 falhas)
+- Força bruta detectada do IP 180.180.119.160 (6 falhas)
+- Força bruta detectada do IP 106.250.183.218 (6 falhas)
+- Força bruta detectada do IP 218.8.128.233 (8 falhas)
+- Força bruta detectada do IP 201.254.163.153 (6 falhas)
+- Força bruta detectada do IP 173.82.194.233 (326 falhas)
+- Força bruta detectada do IP 167.114.218.6 (20 falhas)
+- Força bruta detectada do IP 58.227.194.254 (6 falhas)
+- Força bruta detectada do IP 121.186.122.216 (6 falhas)
+- Força bruta detectada do IP 87.96.177.93 (6 falhas)
+- Força bruta detectada do IP 183.136.178.22 (25 falhas)
+- Força bruta detectada do IP 119.193.140.189 (6 falhas)
+- Força bruta detectada do IP 123.255.103.142 (7 falhas)
+- Força bruta detectada do IP 119.193.140.192 (6 falhas)
+- Força bruta detectada do IP 183.179.87.60 (6 falhas)
+- Força bruta detectada do IP 186.57.227.193 (8 falhas)
+- Força bruta detectada do IP 181.26.4.223 (6 falhas)
+- Força bruta detectada do IP 209.250.242.40 (13 falhas)
+- Força bruta detectada do IP 175.111.129.225 (6 falhas)
+- Força bruta detectada do IP 113.87.188.151 (6 falhas)
+- Força bruta detectada do IP 217.122.101.74 (6 falhas)
+- Força bruta detectada do IP 218.31.25.109 (6 falhas)
+- Força bruta detectada do IP 126.87.244.243 (6 falhas)
+- Força bruta detectada do IP 93.190.138.107 (58 falhas)
+- Força bruta detectada do IP 140.250.99.122 (6 falhas)
+- Força bruta detectada do IP 168.187.205.196 (22 falhas)
+- Força bruta detectada do IP 51.15.183.141 (86 falhas)
+- Força bruta detectada do IP 60.26.98.209 (15 falhas)
+- Força bruta detectada do IP 119.193.140.161 (8 falhas)
+- Força bruta detectada do IP 60.191.144.54 (8 falhas)
+- Força bruta detectada do IP 37.79.93.107 (6 falhas)
+- Força bruta detectada do IP 222.220.92.148 (6 falhas)
+- Força bruta detectada do IP 163.172.176.112 (8 falhas)
+- Força bruta detectada do IP 178.151.45.76 (8 falhas)
+- Força bruta detectada do IP 60.191.240.70 (16 falhas)
+- Força bruta detectada do IP 91.224.204.214 (6 falhas)
+- Força bruta detectada do IP 119.193.140.171 (6 falhas)
+- Força bruta detectada do IP 113.122.220.161 (6 falhas)
+- Força bruta detectada do IP 58.218.200.24 (16 falhas)
+- Força bruta detectada do IP 119.193.140.208 (6 falhas)
+- Força bruta detectada do IP 111.222.107.90 (6 falhas)
+- Força bruta detectada do IP 46.148.21.32 (66 falhas)
+- Força bruta detectada do IP 77.187.24.234 (6 falhas)
+- Força bruta detectada do IP 64.30.101.155 (6 falhas)
+- Força bruta detectada do IP 24.183.36.6 (6 falhas)
+- Força bruta detectada do IP 185.165.29.160 (153 falhas)
+- Força bruta detectada do IP 176.65.45.96 (6 falhas)
+- Força bruta detectada do IP 75.138.16.23 (6 falhas)
+- Força bruta detectada do IP 119.193.140.200 (6 falhas)
+- Força bruta detectada do IP 103.207.39.67 (27 falhas)
+- Força bruta detectada do IP 73.22.235.103 (6 falhas)
+- Força bruta detectada do IP 139.198.188.137 (12 falhas)
+- Força bruta detectada do IP 81.165.204.203 (6 falhas)
+- Força bruta detectada do IP 190.58.255.229 (111 falhas)
+- Força bruta detectada do IP 95.68.207.93 (6 falhas)
+- Força bruta detectada do IP 115.212.195.253 (6 falhas)
+- Força bruta detectada do IP 191.22.200.167 (7 falhas)
+- Força bruta detectada do IP 104.217.224.250 (6 falhas)
+- Força bruta detectada do IP 183.129.255.34 (205 falhas)
+- Força bruta detectada do IP 94.156.246.118 (6 falhas)
+- Força bruta detectada do IP 222.174.255.14 (6 falhas)
+- Força bruta detectada do IP 106.46.217.155 (6 falhas)
+- Força bruta detectada do IP 121.56.145.74 (6 falhas)
+- Força bruta detectada do IP 34.199.49.113 (5 falhas)
+- Força bruta detectada do IP 191.201.195.56 (53 falhas)
+- Força bruta detectada do IP 103.89.88.139 (5 falhas)
+- Força bruta detectada do IP 218.65.30.124 (338 falhas)
+- Força bruta detectada do IP 42.63.19.194 (8 falhas)
+- Força bruta detectada do IP 113.215.58.76 (6 falhas)
+- Força bruta detectada do IP 153.34.174.252 (6 falhas)
+- Força bruta detectada do IP 212.47.254.64 (22 falhas)
+- Força bruta detectada do IP 218.65.30.134 (54 falhas)
+- Força bruta detectada do IP 51.15.193.10 (60 falhas)
+- Força bruta detectada do IP 51.15.199.66 (105 falhas)
+- Força bruta detectada do IP 212.47.252.220 (30 falhas)
+- Força bruta detectada do IP 212.47.249.39 (28 falhas)
+- Força bruta detectada do IP 219.151.22.43 (6 falhas)
+- Força bruta detectada do IP 59.52.8.212 (21 falhas)
+- Força bruta detectada do IP 139.219.191.138 (10852 falhas)
+- Força bruta detectada do IP 182.100.67.52 (3413 falhas)
+- Força bruta detectada do IP 94.177.161.99 (21 falhas)
+- Força bruta detectada do IP 82.127.165.147 (6 falhas)
+- Força bruta detectada do IP 88.165.82.208 (6 falhas)
+- Força bruta detectada do IP 103.79.142.55 (48 falhas)
+- Força bruta detectada do IP 212.47.235.87 (21 falhas)
+- Força bruta detectada do IP 46.101.0.16 (5 falhas)
+- Força bruta detectada do IP 172.96.142.155 (33 falhas)
+- Força bruta detectada do IP 112.53.156.90 (17 falhas)
+- Força bruta detectada do IP 61.92.179.72 (6 falhas)
+- Força bruta detectada do IP 218.65.30.190 (226 falhas)
+- Força bruta detectada do IP 8.25.30.21 (8 falhas)
+- Força bruta detectada do IP 218.65.30.40 (134 falhas)
+- Força bruta detectada do IP 159.89.38.66 (48 falhas)
+- Força bruta detectada do IP 220.165.100.186 (6 falhas)
+- Força bruta detectada do IP 110.72.34.14 (6 falhas)
+- Força bruta detectada do IP 119.164.255.207 (7 falhas)
+- Força bruta detectada do IP 144.0.225.197 (6 falhas)
+- Força bruta detectada do IP 178.47.108.80 (6 falhas)
+- Força bruta detectada do IP 219.151.22.37 (6 falhas)
+- Força bruta detectada do IP 123.249.20.41 (401 falhas)
+- Força bruta detectada do IP 222.142.66.125 (6 falhas)
+- Força bruta detectada do IP 5.18.248.14 (6 falhas)
+- Força bruta detectada do IP 169.0.180.253 (97 falhas)
+- Força bruta detectada do IP 218.65.30.126 (1820 falhas)
+- Força bruta detectada do IP 185.165.31.41 (6 falhas)
+- Força bruta detectada do IP 220.191.194.22 (10 falhas)
+- Força bruta detectada do IP 1.34.138.144 (418 falhas)
+- Força bruta detectada do IP 90.54.119.145 (6 falhas)
+- Força bruta detectada do IP 95.188.84.199 (371 falhas)
+- Força bruta detectada do IP 95.85.6.208 (22 falhas)
+- Força bruta detectada do IP 153.35.1.117 (12 falhas)
+- Força bruta detectada do IP 112.120.195.41 (6 falhas)
+- Força bruta detectada do IP 217.61.96.166 (16 falhas)
+- Força bruta detectada do IP 94.177.204.40 (14 falhas)
+- Força bruta detectada do IP 202.107.207.123 (301 falhas)
+- Força bruta detectada do IP 188.166.228.127 (12 falhas)
+- Força bruta detectada do IP 117.52.87.214 (442 falhas)
+- Força bruta detectada do IP 162.223.162.34 (15 falhas)
+- Força bruta detectada do IP 219.151.22.59 (28 falhas)
+- Força bruta detectada do IP 119.146.200.74 (44 falhas)
+- Força bruta detectada do IP 61.54.185.233 (6 falhas)
+- Força bruta detectada do IP 79.59.10.167 (6 falhas)
+- Força bruta detectada do IP 58.242.83.25 (14383 falhas)
+- Força bruta detectada do IP 115.46.70.197 (6 falhas)
+- Força bruta detectada do IP 218.65.30.30 (8374 falhas)
+- Força bruta detectada do IP 188.170.109.26 (6 falhas)
+- Força bruta detectada do IP 183.105.132.231 (6 falhas)
+- Força bruta detectada do IP 182.100.67.120 (6179 falhas)
+- Força bruta detectada do IP 219.147.95.246 (24 falhas)
+- Força bruta detectada do IP 222.186.172.53 (264 falhas)
+- Força bruta detectada do IP 125.20.160.106 (9 falhas)
+- Força bruta detectada do IP 14.142.122.26 (12 falhas)
+- Força bruta detectada do IP 43.227.135.250 (12 falhas)
+- Força bruta detectada do IP 119.1.109.20 (859 falhas)
+- Força bruta detectada do IP 49.77.235.11 (6 falhas)
+- Força bruta detectada do IP 139.219.239.13 (586 falhas)
+- Força bruta detectada do IP 183.192.189.133 (614 falhas)
+- Força bruta detectada do IP 219.151.22.55 (6 falhas)
+- Força bruta detectada do IP 103.89.89.221 (45 falhas)
+- Força bruta detectada do IP 183.65.30.2 (459 falhas)
+- Força bruta detectada do IP 190.196.234.141 (61 falhas)
+- Força bruta detectada do IP 201.254.56.214 (6 falhas)
+- Força bruta detectada do IP 183.63.110.206 (17340 falhas)
+- Força bruta detectada do IP 45.76.33.212 (11 falhas)
+- Força bruta detectada do IP 209.250.242.125 (10 falhas)
+- Força bruta detectada do IP 221.124.73.78 (8 falhas)
+- Força bruta detectada do IP 180.153.67.7 (8 falhas)
+- Força bruta detectada do IP 218.87.109.154 (242 falhas)
+- Força bruta detectada do IP 121.131.32.127 (6 falhas)
+- Força bruta detectada do IP 119.193.140.201 (6 falhas)
+- Força bruta detectada do IP 59.63.188.30 (28766 falhas)
+- Força bruta detectada do IP 45.77.126.151 (8 falhas)
+- Força bruta detectada do IP 106.200.251.177 (6 falhas)
+- Força bruta detectada do IP 159.203.15.63 (7 falhas)
+- Força bruta detectada do IP 218.87.109.156 (7135 falhas)
+- Força bruta detectada do IP 86.213.13.102 (6 falhas)
+- Força bruta detectada do IP 176.209.175.254 (6 falhas)
+- Força bruta detectada do IP 123.186.147.2 (8 falhas)
+- Força bruta detectada do IP 45.55.240.243 (24 falhas)
+- Força bruta detectada do IP 187.119.142.14 (61 falhas)
+- Força bruta detectada do IP 171.37.175.225 (6 falhas)
+- Força bruta detectada do IP 183.196.29.120 (62 falhas)
+- Força bruta detectada do IP 179.147.52.119 (50 falhas)
+- Força bruta detectada do IP 103.207.39.19 (9 falhas)
+- Força bruta detectada do IP 60.19.24.13 (13 falhas)
+- Força bruta detectada do IP 115.52.81.125 (8 falhas)
+- Força bruta detectada do IP 183.196.162.162 (17 falhas)
+- Força bruta detectada do IP 179.167.112.99 (50 falhas)
+- Força bruta detectada do IP 118.96.253.193 (61 falhas)
+- Força bruta detectada do IP 94.167.233.38 (61 falhas)
+- Força bruta detectada do IP 101.89.147.191 (6 falhas)
+- Força bruta detectada do IP 123.13.155.69 (6 falhas)
+- Força bruta detectada do IP 115.200.122.231 (6 falhas)
+- Força bruta detectada do IP 218.65.30.123 (302 falhas)
+- Força bruta detectada do IP 192.99.1.171 (7 falhas)
+- Força bruta detectada do IP 218.4.104.194 (168 falhas)
+- Força bruta detectada do IP 200.186.114.146 (8 falhas)
+- Força bruta detectada do IP 36.232.206.59 (6 falhas)
+- Força bruta detectada do IP 104.149.134.202 (6 falhas)
+- Força bruta detectada do IP 117.40.138.21 (6 falhas)
+- Força bruta detectada do IP 212.237.45.42 (144 falhas)
+- Força bruta detectada do IP 168.167.92.19 (6 falhas)
+- Força bruta detectada do IP 115.238.230.180 (839 falhas)
+- Força bruta detectada do IP 45.248.164.244 (9 falhas)
+- Força bruta detectada do IP 218.65.30.122 (236 falhas)
+- Força bruta detectada do IP 139.59.87.138 (13 falhas)
+- Força bruta detectada do IP 185.103.108.210 (6 falhas)
+- Força bruta detectada do IP 103.207.37.148 (5 falhas)
+- Força bruta detectada do IP 14.221.237.251 (6 falhas)
+- Força bruta detectada do IP 80.82.65.152 (25 falhas)
+- Força bruta detectada do IP 139.59.59.241 (12 falhas)
+- Força bruta detectada do IP 182.100.67.4 (158 falhas)
+- Força bruta detectada do IP 103.192.253.37 (114 falhas)
+- Força bruta detectada do IP 163.172.163.13 (16 falhas)
+- Força bruta detectada do IP 188.243.58.211 (6 falhas)
+- Força bruta detectada do IP 51.15.130.200 (6 falhas)
+- Força bruta detectada do IP 183.152.3.176 (6 falhas)
+- Força bruta detectada do IP 139.59.209.18 (92 falhas)
+- Força bruta detectada do IP 42.225.196.128 (6 falhas)
+- Força bruta detectada do IP 103.28.121.117 (176 falhas)
+- Força bruta detectada do IP 51.15.193.211 (8 falhas)
+- Força bruta detectada do IP 124.127.110.140 (5 falhas)
+- Força bruta detectada do IP 159.89.160.115 (11 falhas)
+- Força bruta detectada do IP 95.215.60.147 (12 falhas)
+- Força bruta detectada do IP 218.65.30.43 (280 falhas)
+- Força bruta detectada do IP 111.11.27.140 (6 falhas)
+- Força bruta detectada do IP 111.7.161.106 (27 falhas)
+- Força bruta detectada do IP 203.162.246.101 (22 falhas)
+- Força bruta detectada do IP 24.72.6.171 (6 falhas)
+- Força bruta detectada do IP 77.64.255.148 (6 falhas)
+- Força bruta detectada do IP 162.223.162.3 (5 falhas)
+- Força bruta detectada do IP 173.0.51.63 (7 falhas)
+- Força bruta detectada do IP 5.36.217.255 (6 falhas)
+- Força bruta detectada do IP 79.160.5.119 (6 falhas)
+- Força bruta detectada do IP 185.165.29.69 (24 falhas)
+- Força bruta detectada do IP 51.15.93.207 (8 falhas)
+- Força bruta detectada do IP 51.15.87.29 (8 falhas)
+- Força bruta detectada do IP 122.2.223.242 (6 falhas)
+- Força bruta detectada do IP 45.248.26.205 (6 falhas)
+- Força bruta detectada do IP 89.46.76.55 (7 falhas)
+- Força bruta detectada do IP 218.65.30.61 (116 falhas)
+- Força bruta detectada do IP 112.208.148.25 (6 falhas)
+- Força bruta detectada do IP 41.139.195.218 (6 falhas)
+- Força bruta detectada do IP 80.211.163.143 (6 falhas)
+- Força bruta detectada do IP 178.161.237.181 (6 falhas)
+- Força bruta detectada do IP 119.185.77.147 (6 falhas)
+- Força bruta detectada do IP 114.67.229.240 (10 falhas)
+- Força bruta detectada do IP 115.249.117.176 (6 falhas)
+- Força bruta detectada do IP 181.65.120.132 (6 falhas)
+- Força bruta detectada do IP 113.195.145.79 (72 falhas)
+- Força bruta detectada do IP 221.0.194.20 (6 falhas)
+- Força bruta detectada do IP 109.211.184.215 (6 falhas)
+- Força bruta detectada do IP 119.178.73.62 (6 falhas)
+- Força bruta detectada do IP 116.12.136.3 (256 falhas)
+- Força bruta detectada do IP 178.62.255.65 (15 falhas)
+- Força bruta detectada do IP 180.164.61.29 (6 falhas)
+- Força bruta detectada do IP 187.61.106.32 (6 falhas)
+- Força bruta detectada do IP 218.87.109.152 (12 falhas)
+- Força bruta detectada do IP 180.66.11.80 (180 falhas)
+- Força bruta detectada do IP 104.192.1.10 (15 falhas)
+- Enumeração de usuários detectada do IP 52.80.34.196
+- Enumeração de usuários detectada do IP 202.100.179.208
+- Enumeração de usuários detectada do IP 183.136.162.51
+- Enumeração de usuários detectada do IP 175.102.13.6
+- Enumeração de usuários detectada do IP 5.188.10.180
+- Enumeração de usuários detectada do IP 185.190.58.151
+- Enumeração de usuários detectada do IP 103.99.0.122
+- Enumeração de usuários detectada do IP 187.141.143.180
+- Enumeração de usuários detectada do IP 181.214.87.4
+- Enumeração de usuários detectada do IP 183.62.140.253
+- Enumeração de usuários detectada do IP 88.147.143.242
+- Enumeração de usuários detectada do IP 5.188.10.182
+- Enumeração de usuários detectada do IP 221.164.9.48
+- Enumeração de usuários detectada do IP 175.207.12.37
+- Enumeração de usuários detectada do IP 61.143.3.203
+- Enumeração de usuários detectada do IP 119.7.221.137
+- Enumeração de usuários detectada do IP 5.188.10.156
+- Enumeração de usuários detectada do IP 87.120.255.141
+- Enumeração de usuários detectada do IP 119.253.248.211
+- Enumeração de usuários detectada do IP 60.172.229.172
+- Enumeração de usuários detectada do IP 115.71.16.143
+- Enumeração de usuários detectada do IP 119.7.221.129
+- Enumeração de usuários detectada do IP 103.217.152.20
+- Enumeração de usuários detectada do IP 82.209.247.10
+- Enumeração de usuários detectada do IP 2.239.208.154
+- Enumeração de usuários detectada do IP 103.207.38.178
+- Enumeração de usuários detectada do IP 221.122.119.83
+- Enumeração de usuários detectada do IP 223.68.134.29
+- Enumeração de usuários detectada do IP 82.200.65.218
+- Enumeração de usuários detectada do IP 118.97.104.142
+- Enumeração de usuários detectada do IP 212.237.41.152
+- Enumeração de usuários detectada do IP 202.92.128.175
+- Enumeração de usuários detectada do IP 220.134.8.244
+- Enumeração de usuários detectada do IP 203.158.215.184
+- Enumeração de usuários detectada do IP 42.159.145.29
+- Enumeração de usuários detectada do IP 122.194.76.132
+- Enumeração de usuários detectada do IP 209.92.176.24
+- Enumeração de usuários detectada do IP 46.101.123.127
+- Enumeração de usuários detectada do IP 103.79.141.173
+- Enumeração de usuários detectada do IP 138.68.152.231
+- Enumeração de usuários detectada do IP 158.140.138.225
+- Enumeração de usuários detectada do IP 165.227.223.226
+- Enumeração de usuários detectada do IP 165.227.55.102
+- Enumeração de usuários detectada do IP 212.237.47.142
+- Enumeração de usuários detectada do IP 5.188.203.114
+- Enumeração de usuários detectada do IP 165.227.109.220
+- Enumeração de usuários detectada do IP 203.190.163.125
+- Enumeração de usuários detectada do IP 185.222.209.151
+- Enumeração de usuários detectada do IP 80.211.253.17
+- Enumeração de usuários detectada do IP 104.236.165.119
+- Enumeração de usuários detectada do IP 217.23.4.15
+- Enumeração de usuários detectada do IP 114.207.154.2
+- Enumeração de usuários detectada do IP 132.147.49.216
+- Enumeração de usuários detectada do IP 94.229.73.156
+- Enumeração de usuários detectada do IP 118.186.36.50
+- Enumeração de usuários detectada do IP 138.197.89.108
+- Enumeração de usuários detectada do IP 198.199.119.249
+- Enumeração de usuários detectada do IP 220.177.198.107
+- Enumeração de usuários detectada do IP 173.239.228.96
+- Enumeração de usuários detectada do IP 195.154.45.62
+- Enumeração de usuários detectada do IP 103.89.91.230
+- Enumeração de usuários detectada do IP 185.165.29.140
+- Enumeração de usuários detectada do IP 58.221.249.102
+- Enumeração de usuários detectada do IP 159.203.87.8
+- Enumeração de usuários detectada do IP 210.212.210.86
+- Enumeração de usuários detectada do IP 218.84.173.202
+- Enumeração de usuários detectada do IP 185.148.39.199
+- Enumeração de usuários detectada do IP 203.147.34.56
+- Enumeração de usuários detectada do IP 77.55.224.139
+- Enumeração de usuários detectada do IP 80.211.162.21
+- Enumeração de usuários detectada do IP 185.165.29.57
+- Enumeração de usuários detectada do IP 66.171.88.199
+- Enumeração de usuários detectada do IP 205.185.115.121
+- Enumeração de usuários detectada do IP 202.107.104.119
+- Enumeração de usuários detectada do IP 183.136.178.30
+- Enumeração de usuários detectada do IP 183.136.178.26
+- Enumeração de usuários detectada do IP 183.136.169.234
+- Enumeração de usuários detectada do IP 220.191.194.42
+- Enumeração de usuários detectada do IP 60.191.229.146
+- Enumeração de usuários detectada do IP 121.14.27.58
+- Enumeração de usuários detectada do IP 220.189.210.211
+- Enumeração de usuários detectada do IP 122.224.69.34
+- Enumeração de usuários detectada do IP 122.224.73.38
+- Enumeração de usuários detectada do IP 115.233.91.246
+- Enumeração de usuários detectada do IP 115.233.91.242
+- Enumeração de usuários detectada do IP 182.23.64.18
+- Enumeração de usuários detectada do IP 209.250.241.56
+- Enumeração de usuários detectada do IP 185.165.29.62
+- Enumeração de usuários detectada do IP 212.83.176.1
+- Enumeração de usuários detectada do IP 103.207.39.38
+- Enumeração de usuários detectada do IP 183.96.119.62
+- Enumeração de usuários detectada do IP 27.72.43.14
+- Enumeração de usuários detectada do IP 202.47.5.16
+- Enumeração de usuários detectada do IP 104.131.135.224
+- Enumeração de usuários detectada do IP 165.227.124.44
+- Enumeração de usuários detectada do IP 87.120.255.161
+- Enumeração de usuários detectada do IP 103.224.166.40
+- Enumeração de usuários detectada do IP 125.65.165.70
+- Enumeração de usuários detectada do IP 159.89.16.221
+- Enumeração de usuários detectada do IP 45.77.138.41
+- Enumeração de usuários detectada do IP 58.217.157.177
+- Enumeração de usuários detectada do IP 209.250.242.246
+- Enumeração de usuários detectada do IP 80.211.140.229
+- Enumeração de usuários detectada do IP 218.8.128.233
+- Enumeração de usuários detectada do IP 173.82.194.233
+- Enumeração de usuários detectada do IP 167.114.218.6
+- Enumeração de usuários detectada do IP 183.136.178.22
+- Enumeração de usuários detectada do IP 183.179.87.60
+- Enumeração de usuários detectada do IP 209.250.242.40
+- Enumeração de usuários detectada do IP 93.190.138.107
+- Enumeração de usuários detectada do IP 168.187.205.196
+- Enumeração de usuários detectada do IP 51.15.183.141
+- Enumeração de usuários detectada do IP 46.148.21.32
+- Enumeração de usuários detectada do IP 185.165.29.160
+- Enumeração de usuários detectada do IP 103.207.39.67
+- Enumeração de usuários detectada do IP 190.58.255.229
+- Enumeração de usuários detectada do IP 183.129.255.34
+- Enumeração de usuários detectada do IP 191.201.195.56
+- Enumeração de usuários detectada do IP 139.219.191.138
+- Enumeração de usuários detectada do IP 94.177.161.99
+- Enumeração de usuários detectada do IP 46.101.0.16
+- Enumeração de usuários detectada do IP 172.96.142.155
+- Enumeração de usuários detectada do IP 112.53.156.90
+- Enumeração de usuários detectada do IP 159.89.38.66
+- Enumeração de usuários detectada do IP 169.0.180.253
+- Enumeração de usuários detectada do IP 185.165.31.41
+- Enumeração de usuários detectada do IP 45.32.212.203
+- Enumeração de usuários detectada do IP 1.34.138.144
+- Enumeração de usuários detectada do IP 95.188.84.199
+- Enumeração de usuários detectada do IP 95.85.6.208
+- Enumeração de usuários detectada do IP 165.227.221.120
+- Enumeração de usuários detectada do IP 217.61.96.166
+- Enumeração de usuários detectada do IP 94.177.204.40
+- Enumeração de usuários detectada do IP 202.107.207.123
+- Enumeração de usuários detectada do IP 188.166.228.127
+- Enumeração de usuários detectada do IP 117.52.87.214
+- Enumeração de usuários detectada do IP 162.223.162.34
+- Enumeração de usuários detectada do IP 119.146.200.74
+- Enumeração de usuários detectada do IP 165.227.78.89
+- Enumeração de usuários detectada do IP 62.210.169.42
+- Enumeração de usuários detectada do IP 125.20.160.106
+- Enumeração de usuários detectada do IP 14.142.122.26
+- Enumeração de usuários detectada do IP 43.227.135.250
+- Enumeração de usuários detectada do IP 139.219.239.13
+- Enumeração de usuários detectada do IP 103.89.89.221
+- Enumeração de usuários detectada do IP 183.65.30.2
+- Enumeração de usuários detectada do IP 190.196.234.141
+- Enumeração de usuários detectada do IP 45.76.33.212
+- Enumeração de usuários detectada do IP 209.250.242.125
+- Enumeração de usuários detectada do IP 185.2.82.122
+- Enumeração de usuários detectada do IP 45.77.126.151
+- Enumeração de usuários detectada do IP 159.203.15.63
+- Enumeração de usuários detectada do IP 187.119.142.14
+- Enumeração de usuários detectada do IP 183.196.29.120
+- Enumeração de usuários detectada do IP 172.96.173.166
+- Enumeração de usuários detectada do IP 179.147.52.119
+- Enumeração de usuários detectada do IP 103.207.39.19
+- Enumeração de usuários detectada do IP 60.19.24.13
+- Enumeração de usuários detectada do IP 179.167.112.99
+- Enumeração de usuários detectada do IP 118.96.253.193
+- Enumeração de usuários detectada do IP 94.167.233.38
+- Enumeração de usuários detectada do IP 218.4.104.194
+- Enumeração de usuários detectada do IP 212.237.45.42
+- Enumeração de usuários detectada do IP 115.238.230.180
+- Enumeração de usuários detectada do IP 139.59.87.138
+- Enumeração de usuários detectada do IP 103.207.37.148
+- Enumeração de usuários detectada do IP 80.82.65.152
+- Enumeração de usuários detectada do IP 139.59.59.241
+- Enumeração de usuários detectada do IP 139.59.209.18
+- Enumeração de usuários detectada do IP 103.28.121.117
+- Enumeração de usuários detectada do IP 124.127.110.140
+- Enumeração de usuários detectada do IP 159.89.160.115
+- Enumeração de usuários detectada do IP 95.215.60.147
+- Enumeração de usuários detectada do IP 203.162.246.101
+- Enumeração de usuários detectada do IP 45.55.240.243
+- Enumeração de usuários detectada do IP 89.46.76.55
+- Enumeração de usuários detectada do IP 80.211.163.143
+- Enumeração de usuários detectada do IP 219.151.22.59
+- Enumeração de usuários detectada do IP 178.62.255.65
+- Enumeração de usuários detectada do IP 116.12.136.3
+- Enumeração de usuários detectada do IP 180.66.11.80
+
+Eventos anômalos (IA):
+- {'raw': 'Dec 10 06:55:46 LabSZ sshd[24200]: Invalid user webmaster from 173.234.31.186', 'event': 'invalid user', 'user': 'webmaster', 'ip': '173.234.31.186'}
+- {'raw': 'Dec 10 06:55:48 LabSZ sshd[24200]: Failed password for invalid user webmaster from 173.234.31.186 port 38926 ssh2', 'event': 'failed password', 'user': 'for', 'ip': '173.234.31.186'}
+- {'raw': 'Dec 10 07:08:28 LabSZ sshd[24208]: Invalid user webmaster from 173.234.31.186', 'event': 'invalid user', 'user': 'webmaster', 'ip': '173.234.31.186'}
+- {'raw': 'Dec 10 07:08:30 LabSZ sshd[24208]: Failed password for invalid user webmaster from 173.234.31.186 port 39257 ssh2', 'event': 'failed password', 'user': 'for', 'ip': '173.234.31.186'}
+- {'raw': 'Dec 10 07:11:42 LabSZ sshd[24224]: Invalid user chen from 202.100.179.208', 'event': 'invalid user', 'user': 'chen', 'ip': '202.100.179.208'}

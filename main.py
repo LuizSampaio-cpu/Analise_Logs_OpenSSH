@@ -1,223 +1,133 @@
-import re
-from collections import defaultdict
 
+import re
+from collections import defaultdict, Counter
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import DBSCAN
 
-def load_log_source(source_path):
-    """Ponto de entrada do sistema. Responsável por carregar os logs a partir do dataset"""
-    raw_logs = []
-    with open(source_path, 'r') as file:
-        for line in file:
-            raw_logs.append(line.strip())
-    return raw_logs
+def load_logs(path):
+    with open(path, "r", encoding="utf-8", errors="ignore") as f:
+        return f.readlines()
 
+# ----------------------
 
-def remove_log_header(log_line):
-    """Remove o cabeçalho do log utilizando Regex.Remove timestamp, hostname e PID do processo sshd."""
-    header_pattern = r'^[A-Za-z]{3}\s+\d+\s+\d+:\d+:\d+\s+\S+\s+sshd\[\d+\]:\s+'
-    return re.sub(header_pattern, '', log_line)
+# Novo método para normalizar e estruturar os logs para análise, substituindo os métodos da entrega anterior remove_log_header(), normalize_log() e tokenize_log().
+# Além disso, o método extract_event_data() também agora está incluso no regex, ou seja, não é mais necessário.
 
-
-def normalize_log(log_line):
-    """Normaliza o texto do log: remove símbolos e espaços em branco"""
-    log_line = log_line.lower()
-    log_line = re.sub(r'[^\w\s]', '', log_line)
-    log_line = re.sub(r'\s+', ' ', log_line)
-    return log_line.strip()
-
-
-def tokenize_log(log_line):
-    """
-    Tokeniza o log utilizando expressões regulares,
-    separando palavras relevantes.
-    """
-    tokens = re.findall(r'\w+', log_line)
-    return tokens
-
-#Novo método para extrair dados estruturados
-def extract_event_data(log_line):
-    """Extrai tipo de evento, usuário e IP"""
-    user = None
-    ip = None
-    event_type = "unknown"
-
-    user_match = re.search(r'user (\w+)', log_line)
-    ip_match = re.search(r'from (\d+\.\d+\.\d+\.\d+)', log_line)
-
-    if user_match:
-        user = user_match.group(1)
-    if ip_match:
-        ip = ip_match.group(1)
-
-    if "failed password" in log_line:
-        event_type = "failed_login"
-    elif "invalid user" in log_line:
-        event_type = "invalid_user"
-    elif "accepted password" in log_line:
-        event_type = "successful_login"
-
-    return {
-        "event_type": event_type,
-        "user": user,
-        "ip": ip
-    }
-
+# ----------------------
 def preprocess_logs(raw_logs):
-    """
-    Pipeline completo de pré-processamento.
-    Cada linha de log passa sequencialmente por:
-    remoção do cabeçalho, normalização e tokenização.
-    """
-    structured_events = []
+    events = []
+    pattern = re.compile(
+        r"(?P<event>Failed password|Accepted password|Invalid user).*?(?P<user>\w+).*?from\s(?P<ip>\d+\.\d+\.\d+\.\d+)",
+        re.IGNORECASE
+    )
 
-    for log in raw_logs:
-        log_no_header = remove_log_header(log)
-        normalized_log = normalize_log(log_no_header)
-        tokens = tokenize_log(normalized_log)
-        event_data= extract_event_data(normalized_log) # Extração de dados estruturados do evento
+    for line in raw_logs:
+        match = pattern.search(line)
+        if match:
+            events.append({
+                "raw": line.strip(),
+                "event": match.group("event").lower(),
+                "user": match.group("user"),
+                "ip": match.group("ip")
+            })
 
-        structured_events.append({
-            "original_log": log,
-            "processed_log": normalized_log,
-            "tokens": tokens,
-            "event": event_data
-        })
+    return events
 
-    return structured_events
+#-------------------
 
-#Método específico para detecção de ataques de força bruta
-def detect_bruteforce(events, threshold=5):
-    ip_failures = defaultdict(int)
+# Para facilitar análise e simplificar o código, o novo método detect_heuristics() reúne as análises que antes se encontravam nos métodos de 
+# detect_brute_force(), detect_user_enumeration() e detect_suspicious_login(), os quais analisavam, respectivamente:
+# tentativas de força bruta, tentativas de enumeração de usuários e tentativas de login suspeitos.
+
+#-------------------
+
+def detect_heuristics(events):
     alerts = []
-
-    for e in events:
-        if e["event"]["event_type"] == "failed_login":
-            ip = e["event"]["ip"]
-            if ip:
-                ip_failures[ip] += 1
-                if ip_failures[ip] == threshold:
-                    alerts.append(f"Força bruta detectada do IP {ip}")
-
-    return alerts
-
-#Método específico para detecção de ataques de enumeração de usuários
-def detect_user_enumeration(events, threshold=3):
+    ip_failures = defaultdict(int)
     ip_users = defaultdict(set)
-    alerts = []
 
     for e in events:
-        if e["event"]["event_type"] == "invalid_user":
-            ip = e["event"]["ip"]
-            user = e["event"]["user"]
-            if ip and user:
-                ip_users[ip].add(user)
-                if len(ip_users[ip]) == threshold:
-                    alerts.append(f"Enumeração de usuários detectada do IP {ip}")
+        if "failed" in e["event"]:
+            ip_failures[e["ip"]] += 1
+        if "invalid" in e["event"]:
+            ip_users[e["ip"]].add(e["user"])
+
+    for ip, count in ip_failures.items():
+        if count >= 5:
+            alerts.append(f"Força bruta detectada do IP {ip} ({count} falhas)")
+
+    for ip, users in ip_users.items():
+        if len(users) >= 3:
+            alerts.append(f"Enumeração de usuários detectada do IP {ip}")
 
     return alerts
 
-#Método específico para detecção de login suspeito
-def detect_suspicious_login(events, threshold=3):
-    ip_failures = defaultdict(int)
-    alerts = []
+# -----------------
 
-    for e in events:
-        ip = e["event"]["ip"]
-        if not ip:
-            continue
+# O método de ai_analysis() agora realiza também a função do método anterior de vetorização dos logs (vectorize_logs()), que agora implementa
+# o TfidfVectorizer() para realizar tal ação. Além disso, o antigo método de detecção de anomalias (detect_anomalies()) também teve sua funcionalidade
+# absorvida pelo método de análise abaixo.
 
-        if e["event"]["event_type"] == "failed_login":
-            ip_failures[ip] += 1
+# -----------------
+def ai_analysis(events):
+    texts = [f"{e['event']} {e['user']} {e['ip']}" for e in events]
 
-        if e["event"]["event_type"] == "successful_login":
-            if ip_failures[ip] >= threshold:
-                alerts.append(
-                    f"Login suspeito do IP {ip} após {ip_failures[ip]} falhas"
-                )
-
-    return alerts
-
-#Método novo para veotrização
-def vectorize_logs(events):
-    """ Converte logs em vetores numéricos usando TF-IDF. """
-    texts = [e["processed_log"] for e in events]
     vectorizer = TfidfVectorizer()
     vectors = vectorizer.fit_transform(texts)
-    return vectors
 
-#Método que integra IA na detecção de problemas
-def detect_anomalies(vectors, eps=0.8, min_samples=5):
-    """Aplica DBSCAN para identificar padrões e anomalias."""
-    model = DBSCAN(eps=eps, min_samples=min_samples, metric="cosine")
+    model = DBSCAN(metric="cosine", eps=0.5, min_samples=5)
     labels = model.fit_predict(vectors)
-    return labels
 
-def apply_analysis(events):
-    """Integra o agente de IA e identifica eventos anômalos"""
-    vectors = vectorize_logs(events)
-    labels = detect_anomalies(vectors)
+    anomalies = [e for e, l in zip(events, labels) if l == -1]
+    return anomalies
 
-    count = 0
+# -------------------
 
-    for label in labels:
-        if label == -1:
-            count += 1
+# Os métodos anteriores para exibição do status de análise e e aplicação da mesma não são mais necessários (status() e apply_analysis()). O novo método de geração do
+# relatório (generate_report()) é agora o responsável por isso. Ou seja, pegar o resultado da análise pelo agente e gerar um arquivo de relatório para o usuário 
+# conseguir entender a análise feita pelo programa, não sendo mais exibido apenas no console de execução.
 
-    return count
+# -------------------
 
-#Método para exibir o status dos alertas e resultados da análise
-def status (bruteforce_alerts, enumeration_alerts, suspicious_alerts, count ):
-     
+def generate_templates(events):
+    templates = Counter()
+    for e in events:
+        templates[f"{e['event']} for USER from IP"] += 1
+    return templates
 
-    if bruteforce_alerts:
-        print(f"[ALERTA] {len(bruteforce_alerts)} indício de força bruta detectado.")
+def generate_report(events, alerts, anomalies, templates):
+    with open("relatorio_final.txt", "w", encoding="utf-8") as f:
+        f.write("RELATÓRIO – ANÁLISE DE LOGS OPENSSH\n\n")
 
-    if enumeration_alerts:
-        print(f"[ALERTA] {len(enumeration_alerts)} indício de enumeração de usuários.")
+        f.write("Exemplos de logs processados:\n")
+        for e in events[:5]:
+            f.write(f"- {e['raw']}\n")
 
-    if suspicious_alerts:
-        print(f"[ALERTA] {len(suspicious_alerts)} login suspeito após falhas.")
+        f.write("\nTemplates gerados:\n")
+        for t, c in templates.items():
+            f.write(f"- {t} ({c})\n")
 
-    if count > 0:
-        print("[ALERTA - IA] Possível comportamento anômalo identificado pelo agente de IA.")
-        print(f"Eventos anômalos detectados: {count}")
-    else:
-        print("Nenhum comportamento relevante detectado.")
+        f.write("\nEventos detectados:\n")
+        for a in alerts:
+            f.write(f"- {a}\n")
 
-    if (
-        bruteforce_alerts
-        or enumeration_alerts
-        or suspicious_alerts
-        or count > 0
-    ):
-        print("\nindícios de possíveis ataques ou atividades suspeitas.")
-    else:
-        print("\nNenhuma atividade suspeita relevante foi detectada.")
-
-
+        f.write("\nEventos anômalos (IA):\n")
+        for a in anomalies[:5]:
+            f.write(f"- {a}\n")
 
 
 def main():
-    raw_logs = load_log_source("SSH.log/dataset.log")
-
-    # Pré-processamento
+    raw_logs = load_logs("SSH.log/SSH.log")
     events = preprocess_logs(raw_logs)
 
-    # Heurísticas
-    bruteforce_alerts = detect_bruteforce(events)
-    enumeration_alerts = detect_user_enumeration(events)
-    suspicious_alerts = detect_suspicious_login(events)
+    alerts = detect_heuristics(events)
+    anomalies = ai_analysis(events[:1000])
+    templates = generate_templates(events)
 
-    events_test = events[:1000]
-    count = apply_analysis(events_test)
+    generate_report(events, alerts, anomalies, templates)
 
-    status(
-        bruteforce_alerts,
-        enumeration_alerts,
-        suspicious_alerts,
-        count
-    )
- 
+    print("Análise concluída. Relatório gerado.")
+
+
 if __name__ == "__main__":
     main()
